@@ -20,6 +20,10 @@
 
 package BatBall.Main;
 
+import BatBall.input.KeyInput;
+import BatBall.objects.Ball;
+import BatBall.objects.Bat;
+import BatBall.objects.Brick;
 import BatBall.objects.Objects;
 
 import java.awt.Canvas;
@@ -27,24 +31,54 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 
-public class Game extends Canvas implements Runnable{
+public class Game extends Canvas implements Runnable {
 
     private boolean running = false;
     private int frames = 0;
     private int fps, ups;
-    private int updates;
+    private int updates = 0;
 
     private Window window;
     private Thread thread;
 
     private Objects objects;
+    private Bat bat;
 
     public Game() {
+        bat = new Bat(this);
+        objects.addObject(bat);
+        objects.addObject(new Ball(bat.getX() + bat.getWidth() / 2 - 16, bat.getY() - 32, this));
+        this.addKeyListener(new KeyInput(this));
+
+        Color[] colors = new Color[]{
+                Color.red, //1
+                Color.blue, //2
+                Color.cyan, //3
+                Color.DARK_GRAY, //4
+                Color.magenta, //5
+                Color.orange, //6
+        };
+
+        boolean[] hard = new boolean[]{
+                true, //1
+                true, //2
+                true, //3
+                false, //4
+                false, //5
+                false //6
+        };
+        for(int y = 0; y<6; y++){
+            for(int x = 0; x<20; x++){
+                objects.addObject(new Brick(x*(Window.getWindowWidth())/20,y*30,Window.getWindowWidth()/20,30,colors[y],hard[y],this));
+            }
+        }
+
         window = new Window(this);
+
         start();
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         new Game();
     }
 
@@ -57,7 +91,6 @@ public class Game extends Canvas implements Runnable{
         double ns = 1000000000 / amountOfUpdates;
         double delta = 0;
         long timer = System.currentTimeMillis();
-        int frames = 0;
         while (running) {
             long now = System.nanoTime();
             delta += (now - lastTime) / ns;
@@ -67,11 +100,11 @@ public class Game extends Canvas implements Runnable{
                 delta--;
                 updates++;
             }
-            if(running){
+            if (running) {
                 render();
                 frames++;
             }
-            if(System.currentTimeMillis() - timer > 1000) {
+            if (System.currentTimeMillis() - timer > 1000) {
                 timer += 1000;
                 fps = frames;
                 frames = 0;
@@ -85,7 +118,7 @@ public class Game extends Canvas implements Runnable{
 
     private void render() {
         BufferStrategy bs = getBufferStrategy();
-        if(bs == null){
+        if (bs == null) {
             createBufferStrategy(3);
             return;
         }
@@ -104,13 +137,13 @@ public class Game extends Canvas implements Runnable{
         objects.update();
     }
 
-    private synchronized void start(){
+    private synchronized void start() {
         running = true;
         this.thread = new Thread(this, "Main Thread");
         thread.start();
     }
 
-    private synchronized void stop(){
+    private synchronized void stop() {
         running = false;
         try {
             thread.join();
@@ -121,5 +154,9 @@ public class Game extends Canvas implements Runnable{
 
     public Objects getObjects() {
         return objects;
+    }
+
+    public Bat getBat() {
+        return bat;
     }
 }

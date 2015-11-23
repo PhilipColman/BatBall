@@ -24,11 +24,11 @@ import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 import java.awt.Toolkit;
 
-public class Window extends JFrame{
+public class Window extends JFrame {
 
     private static Toolkit toolkit = Toolkit.getDefaultToolkit();
 
-    public Window(Game game){
+    public Window(Game game) {
         super("Bat and Ball");
         //this.setUndecorated(true);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -44,6 +44,6 @@ public class Window extends JFrame{
     }
 
     public static int getWindowHeight() {
-        return (int)toolkit.getScreenSize().getHeight();
+        return (int) toolkit.getScreenSize().getHeight();
     }
 }

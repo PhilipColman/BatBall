@@ -32,7 +32,7 @@ import java.util.Random;
 public abstract class GameObject {
 
     protected final String name;
-    protected int x,y,width,height, speedX, speedY;
+    protected int x, y, width, height, speedX, speedY;
     protected final Random random;
     protected int baseSpeed;
     protected Color color;
@@ -53,29 +53,34 @@ public abstract class GameObject {
     }
 
     public abstract void update();
+
     public abstract void render(Graphics g);
 
-    protected Rectangle getBounds(){
-        return new Rectangle(x,y,width,height);
+    protected Rectangle getBounds() {
+        return new Rectangle(x, y, width, height);
     }
-    protected void move(){
+
+    protected void move() {
         x += speedX;
         y += speedY;
     }
-    protected void walls(){
-        if(y<= 0|| y >= Window.getWindowHeight()-32)
+
+    protected void walls() {
+        if (y <= 0 || y >= Window.getWindowHeight() - 32)
             speedY *= -1;
 
-        if(x<= 0|| x >= Window.getWindowWidth()-32)
+        if (x <= 0 || x >= Window.getWindowWidth() - 32)
             speedX *= -1;
     }
-    protected void drawBounds(Graphics g){
+
+    protected void drawBounds(Graphics g) {
         Graphics2D graphics2D = (Graphics2D) g;
         graphics2D.setColor(Color.white);
         graphics2D.draw(getBounds());
     }
-    protected void remove(){
-        if(y>Window.getWindowHeight()){
+
+    protected void remove() {
+        if (y > Window.getWindowHeight()) {
             objects.removeObject(this);
         }
     }
@@ -141,9 +146,9 @@ public abstract class GameObject {
     }
 
     public void updateSpeed() {
-        if(speedX !=0&&speedY!=0){
-            speedX = (speedX/Math.abs(speedX))*baseSpeed;
-            speedY = (speedY/Math.abs(speedY))*baseSpeed;
+        if (speedX != 0 && speedY != 0) {
+            speedX = (speedX / Math.abs(speedX)) * baseSpeed;
+            speedY = (speedY / Math.abs(speedY)) * baseSpeed;
         }
     }
 

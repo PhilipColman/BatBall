@@ -27,35 +27,36 @@ public class Objects {
 
     private LinkedList<GameObject> objects = new LinkedList<GameObject>();
 
-    public Objects(){
+    public Objects() {
 
     }
 
-    public void update(){
-        for(int i =0; i <objects.size(); i++){
+    public void update() {
+        for (int i = 0; i < objects.size(); i++) {
             GameObject temp = objects.get(i);
             temp.update();
         }
     }
 
-    public void render(Graphics g){
+    public void render(Graphics g) {
         for (GameObject temp : objects) {
             temp.render(g);
         }
     }
 
-    public void addObject(GameObject object){
+    public void addObject(GameObject object) {
         objects.add(object);
     }
 
-    public int getSize(){
+    public int getSize() {
         return objects.size();
     }
 
-    public void removeObject(GameObject object){
+    public void removeObject(GameObject object) {
         objects.remove(object);
     }
-    public GameObject getObject(int i){
+
+    public GameObject getObject(int i) {
         return objects.get(i);
     }
 
