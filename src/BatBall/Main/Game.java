@@ -20,6 +20,8 @@
 
 package BatBall.Main;
 
+import BatBall.objects.Objects;
+
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -34,6 +36,8 @@ public class Game extends Canvas implements Runnable{
 
     private Window window;
     private Thread thread;
+
+    private Objects objects;
 
     public Game() {
         window = new Window(this);
@@ -90,12 +94,14 @@ public class Game extends Canvas implements Runnable{
         g.setColor(Color.black);
         g.fillRect(0, 0, Window.getWindowWidth(), Window.getWindowWidth());
 
+        objects.render(g);
+
         g.dispose();
         bs.show();
     }
 
     private void update() {
-
+        objects.update();
     }
 
     private synchronized void start(){
@@ -111,5 +117,9 @@ public class Game extends Canvas implements Runnable{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public Objects getObjects() {
+        return objects;
     }
 }
