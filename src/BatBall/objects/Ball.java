@@ -129,4 +129,9 @@ public class Ball extends GameObject {
     public static void setBalls(int balls) {
         Ball.balls = balls;
     }
+
+    public static int getBalls() {
+        return balls;
+    }
+
 }

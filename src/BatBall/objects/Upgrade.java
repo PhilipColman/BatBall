@@ -110,7 +110,7 @@ public class Upgrade extends GameObject {
                 update = false;
                 break;
             case ExtraBalls:
-                Ball.setBalls(3);
+                Ball.setBalls(Ball.getBalls()+2);
                 Ball ball = new Ball(bat.getX() + bat.getWidth() / 2 - 16, bat.getY() - 32, game);
                 ball.setDocked(false);
                 objects.addObject(ball);
