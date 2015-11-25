@@ -32,9 +32,9 @@ public class Window extends JFrame {
         super("Bat and Ball");
         //this.setUndecorated(true);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //this.setResizable(false);
         this.add(game);
         this.setVisible(true);
     }

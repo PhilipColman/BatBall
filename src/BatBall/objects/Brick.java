@@ -33,7 +33,8 @@ public class Brick extends GameObject {
 
     public Brick(int x, int y, int width, int height, Color color, boolean hard, Game game) {
         super("brick", x, y, height, width, 0, color, game);
-        this.upgrade = random.nextBoolean();
+        //this.upgrade = random.nextBoolean();
+        this.upgrade = true;
         this.hard = hard;
         if (hasUpgrade()) {
             _upgrade = new Upgrade(Upgrade.Upgrades.values()[random.nextInt(Upgrade.Upgrades.values().length)], x + width / 2, y + height / 2, game);

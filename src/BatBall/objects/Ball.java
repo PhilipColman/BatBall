@@ -31,14 +31,14 @@ public class Ball extends GameObject {
     private final Objects objects;
     private boolean docked;
     private final Bat bat;
-    private static int balls = 1, left = 2;
+    private static int balls = 1, left = 99;
 
     public Ball(int x, int y, Game game) {
         super("ball", x, y, 32, 32, 4, Color.white, game);
         this.docked = true;
         this.bat = game.getBat();
         this.objects = game.getObjects();
-        System.out.print("Ball Made");
+        //System.out.print("Ball Made");
     }
 
     @Override

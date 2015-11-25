@@ -46,6 +46,7 @@ public class Game extends Canvas implements Runnable {
 
     public Game() {
         bat = new Bat(this);
+        objects = new Objects();
         objects.addObject(bat);
         objects.addObject(new Ball(bat.getX() + bat.getWidth() / 2 - 16, bat.getY() - 32, this));
         this.addKeyListener(new KeyInput(this));
@@ -67,9 +68,9 @@ public class Game extends Canvas implements Runnable {
                 false, //5
                 false //6
         };
-        for(int y = 0; y<6; y++){
-            for(int x = 0; x<20; x++){
-                objects.addObject(new Brick(x*(Window.getWindowWidth())/20,y*30,Window.getWindowWidth()/20,30,colors[y],hard[y],this));
+        for (int y = 0; y < 6; y++) {
+            for (int x = 0; x < 20; x++) {
+                objects.addObject(new Brick(x * (Window.getWindowWidth()) / 20, y * 30, Window.getWindowWidth() / 20, 30, colors[y], hard[y], this));
             }
         }
 

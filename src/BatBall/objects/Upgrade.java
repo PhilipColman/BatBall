@@ -120,7 +120,7 @@ public class Upgrade extends GameObject {
 
     private void hitBat() {
         if (getBounds().intersects(bat.getBounds())) {
-            System.out.println(bat.upgradeCount());
+            //System.out.println(bat.upgradeCount());
             if (bat.upgradeCount() == 0) {
                 bat.addUpgrade(this);
                 this.running = true;
