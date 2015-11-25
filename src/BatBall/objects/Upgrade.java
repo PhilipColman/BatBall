@@ -48,6 +48,9 @@ public class Upgrade extends GameObject {
             case Extend:
                 Extend();
                 break;
+            case ExtraBalls:
+                ExtraBalls();
+                break;
         }
         speedY = baseSpeed;
     }
@@ -62,6 +65,12 @@ public class Upgrade extends GameObject {
         this.color = Color.red;
         this.effects = Effects.Bat;
         this.length = 30 * 1000;
+    }
+
+    private void ExtraBalls(){
+        this.color = Color.blue;
+        this.effects = Effects.Ball;
+        this.length = 1 * 1000;
     }
 
     @Override
@@ -99,6 +108,15 @@ public class Upgrade extends GameObject {
                 bat.setWidth(300);
                 bat.setX(bat.getX() - 50);
                 update = false;
+                break;
+            case ExtraBalls:
+                Ball.setBalls(3);
+                Ball ball = new Ball(bat.getX() + bat.getWidth() / 2 - 16, bat.getY() - 32, game);
+                ball.setDocked(false);
+                objects.addObject(ball);
+                ball = new Ball(bat.getX() + bat.getWidth() / 2 - 16, bat.getY() - 32, game);
+                ball.setDocked(false);
+                objects.addObject(ball);
                 break;
         }
 
@@ -162,7 +180,8 @@ public class Upgrade extends GameObject {
 
     public enum Upgrades {
         Speed,
-        Extend
+        Extend,
+        ExtraBalls
     }
 
     public enum Effects {

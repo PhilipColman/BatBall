@@ -124,4 +124,9 @@ public class Ball extends GameObject {
     public void setDocked(boolean docked) {
         this.docked = docked;
     }
+
+
+    public static void setBalls(int balls) {
+        Ball.balls = balls;
+    }
 }
