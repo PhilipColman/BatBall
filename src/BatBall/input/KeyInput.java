@@ -20,7 +20,7 @@
 
 package BatBall.input;
 
-import BatBall.Main.Game;
+import BatBall.main.Game;
 import BatBall.objects.Ball;
 import BatBall.objects.Bat;
 import BatBall.objects.GameObject;

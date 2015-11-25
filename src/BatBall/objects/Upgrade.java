@@ -20,7 +20,7 @@
 
 package BatBall.objects;
 
-import BatBall.Main.Game;
+import BatBall.main.Game;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -33,7 +33,7 @@ public class Upgrade extends GameObject {
     private final Bat bat;
     private boolean running;
     private final Upgrades id;
-    boolean update = true;
+    private boolean update = true;
 
 
     public Upgrade(Upgrades name, int x, int y, Game game) {
@@ -87,7 +87,7 @@ public class Upgrade extends GameObject {
             } else {
                 running = false;
                 bat.removeUpgrade(this);
-                runEffect();
+                removeEffect();
             }
         }
     }

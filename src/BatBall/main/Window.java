@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package BatBall.Main;
+package BatBall.main;
 
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
@@ -26,7 +26,7 @@ import java.awt.Toolkit;
 
 public class Window extends JFrame {
 
-    private static Toolkit toolkit = Toolkit.getDefaultToolkit();
+    private static final Toolkit toolkit = Toolkit.getDefaultToolkit();
 
     public Window(Game game) {
         super("Bat and Ball");

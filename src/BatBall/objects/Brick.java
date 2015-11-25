@@ -20,7 +20,7 @@
 
 package BatBall.objects;
 
-import BatBall.Main.Game;
+import BatBall.main.Game;
 
 import java.awt.Color;
 import java.awt.Graphics;

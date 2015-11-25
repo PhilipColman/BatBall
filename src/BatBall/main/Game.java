@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package BatBall.Main;
+package BatBall.main;
 
 import BatBall.input.KeyInput;
 import BatBall.objects.Ball;
@@ -38,11 +38,11 @@ public class Game extends Canvas implements Runnable {
     private int fps, ups;
     private int updates = 0;
 
-    private Window window;
+    private final Window window;
     private Thread thread;
 
-    private Objects objects;
-    private Bat bat;
+    private final Objects objects;
+    private final Bat bat;
 
     public Game() {
         bat = new Bat(this);

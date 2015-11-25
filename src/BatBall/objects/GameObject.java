@@ -20,8 +20,8 @@
 
 package BatBall.objects;
 
-import BatBall.Main.Game;
-import BatBall.Main.Window;
+import BatBall.main.Game;
+import BatBall.main.Window;
 
 import java.awt.Color;
 import java.awt.Graphics;
