@@ -33,7 +33,7 @@ public class Upgrade extends GameObject {
     private final Bat bat;
     private boolean running;
     private final Upgrades id;
-    private boolean tick = true;
+    boolean update = true;
 
 
     public Upgrade(Upgrades name, int x, int y, Game game) {
@@ -71,44 +71,54 @@ public class Upgrade extends GameObject {
         remove();
         if (running) {
             if (System.currentTimeMillis() <= this.end) {
-                if (tick) {
-                    switch (id) {
-                        case Speed:
-                            for (int i = 0; i < objects.getSize(); i++) {
-                                GameObject temp = objects.getObject(i);
-                                if (temp.getName().equals("ball")) {
-                                    temp.setBaseSpeed(6);
-                                    temp.updateSpeed();
-                                    tick = false;
-                                }
-                            }
-                            break;
-                        case Extend:
-                            bat.setWidth(300);
-                            bat.setX(bat.getX() - 50);
-                            tick = false;
-                            break;
-                    }
+                if(update){
+                    runEffect();
                 }
+
             } else {
                 running = false;
                 bat.removeUpgrade(this);
-                switch (id) {
-                    case Speed:
-                        for (int i = 0; i < objects.getSize(); i++) {
-                            GameObject temp = objects.getObject(i);
-                            if (temp.getName().equals("ball")) {
-                                temp.setBaseSpeed(5);
-                                temp.updateSpeed();
-                            }
-                        }
-                        break;
-                    case Extend:
-                        bat.setWidth(200);
-                        bat.setX(bat.getX() + 50);
-                        break;
-                }
+                runEffect();
             }
+        }
+    }
+
+    private void runEffect(){
+        switch (id) {
+            case Speed:
+                for (int i = 0; i < objects.getSize(); i++) {
+                    GameObject temp = objects.getObject(i);
+                    if (temp.getName().equals("ball")) {
+                        temp.setBaseSpeed(6);
+                        temp.updateSpeed();
+                        update = false;
+                    }
+                }
+                break;
+            case Extend:
+                bat.setWidth(300);
+                bat.setX(bat.getX() - 50);
+                update = false;
+                break;
+        }
+
+    }
+
+    private void removeEffect() {
+        switch (id) {
+            case Speed:
+                for (int i = 0; i < objects.getSize(); i++) {
+                    GameObject temp = objects.getObject(i);
+                    if (temp.getName().equals("ball")) {
+                        temp.setBaseSpeed(5);
+                        temp.updateSpeed();
+                    }
+                }
+                break;
+            case Extend:
+                bat.setWidth(200);
+                bat.setX(bat.getX() + 50);
+                break;
         }
     }
 
@@ -120,18 +130,18 @@ public class Upgrade extends GameObject {
 
     private void hitBat() {
         if (getBounds().intersects(bat.getBounds())) {
-            //System.out.println(bat.upgradeCount());
             if (bat.upgradeCount() == 0) {
                 bat.addUpgrade(this);
                 this.running = true;
-            }
-            for (int i = 0; i < bat.upgradeCount(); i++) {
-                Upgrade temp = bat.getUpgrade(i);
-                if (temp.getName().equals(this.getName())) {
-                    temp.setEnd(System.currentTimeMillis() + this.length);
-                } else {
-                    bat.addUpgrade(this);
-                    this.running = true;
+            } else {
+                for (int i = 0; i < bat.upgradeCount(); i++) {
+                    Upgrade temp = bat.getUpgrade(i);
+                    if (temp.id.equals(this.id)) {
+                        temp.setEnd(System.currentTimeMillis() + this.length);
+                    } else {
+                        bat.addUpgrade(this);
+                        this.running = true;
+                    }
                 }
             }
             objects.removeObject(this);
@@ -159,5 +169,4 @@ public class Upgrade extends GameObject {
         Ball,
         Bat
     }
-
 }
