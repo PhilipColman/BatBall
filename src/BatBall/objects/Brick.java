@@ -20,56 +20,55 @@
 
 package BatBall.objects;
 
-import BatBall.main.Game;
+import BatBall.gameStates.Play;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
 public class Brick extends GameObject {
 
-    private boolean hard;
-    private final boolean upgrade;
-    private Upgrade _upgrade;
+	private boolean hard;
+	private final boolean upgrade;
+	private Upgrade _upgrade;
 
-    public Brick(int x, int y, int width, int height, Color color, boolean hard, Game game) {
-        super("brick", x, y, height, width, 0, color, game);
-        //this.upgrade = random.nextBoolean();
-        this.upgrade = true;
-        this.hard = hard;
-        if (hasUpgrade()) {
-            _upgrade = new Upgrade(Upgrade.Upgrades.values()[random.nextInt(Upgrade.Upgrades.values().length)], x + width / 2, y + height / 2, game);
-        }
-    }
+	public Brick(int x, int y, int width, int height, Color color, boolean hard, Play play) {
+		super("brick", x, y, height, width, 0, color, play);
+		this.upgrade = random.nextBoolean();
+		this.hard = hard;
+		if(hasUpgrade()) {
+			_upgrade = new Upgrade(Upgrade.Upgrades.values()[random.nextInt(Upgrade.Upgrades.values().length)], x + width / 2, y + height / 2, play);
+		}
+	}
 
 
-    @Override
-    public void update() {
+	@Override
+	public void update() {
 
-    }
+	}
 
-    @Override
-    public void render(Graphics g) {
-        g.setColor(color);
-        g.fillRect(x, y, width, height);
-        g.setColor(Color.black);
-        g.drawRect(x, y, width, height);
-        drawBounds(g);
-    }
+	@Override
+	public void render(Graphics g) {
+		g.setColor(color);
+		g.fillRect(x, y, width, height);
+		g.setColor(Color.black);
+		g.drawRect(x, y, width, height);
+		drawBounds(g);
+	}
 
-    public boolean isHard() {
-        return hard;
-    }
+	public boolean isHard() {
+		return hard;
+	}
 
-    public boolean hasUpgrade() {
-        return upgrade;
-    }
+	public boolean hasUpgrade() {
+		return upgrade;
+	}
 
-    public void setHard(boolean hard) {
-        this.hard = hard;
-    }
+	public void setHard(boolean hard) {
+		this.hard = hard;
+	}
 
-    public Upgrade getUpgrade() {
-        return _upgrade;
-    }
+	public Upgrade getUpgrade() {
+		return _upgrade;
+	}
 
 }

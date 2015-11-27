@@ -26,24 +26,24 @@ import java.awt.Toolkit;
 
 public class Window extends JFrame {
 
-    private static final Toolkit toolkit = Toolkit.getDefaultToolkit();
+	private static final Toolkit toolkit = Toolkit.getDefaultToolkit();
 
-    public Window(Game game) {
-        super("Bat and Ball");
-        //this.setUndecorated(true);
-        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setLocationRelativeTo(null);
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        //this.setResizable(false);
-        this.add(game);
-        this.setVisible(true);
-    }
+	public Window(Game game) {
+		super("Bat and Ball");
+		//this.setUndecorated(true);
+		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		this.setLocationRelativeTo(null);
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		//this.setResizable(false);
+		this.add(game);
+		this.setVisible(true);
+	}
 
-    public static int getWindowWidth() {
-        return (int) toolkit.getScreenSize().getWidth();
-    }
+	public static int getWindowWidth() {
+		return (int) toolkit.getScreenSize().getWidth();
+	}
 
-    public static int getWindowHeight() {
-        return (int) toolkit.getScreenSize().getHeight();
-    }
+	public static int getWindowHeight() {
+		return (int) toolkit.getScreenSize().getHeight();
+	}
 }

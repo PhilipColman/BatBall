@@ -20,7 +20,7 @@
 
 package BatBall.objects;
 
-import BatBall.main.Game;
+import BatBall.gameStates.Play;
 import BatBall.main.Window;
 
 import java.awt.Color;
@@ -31,125 +31,125 @@ import java.util.Random;
 
 public abstract class GameObject {
 
-    protected final String name;
-    protected int x, y, width, height, speedX, speedY;
-    protected final Random random;
-    protected int baseSpeed;
-    protected Color color;
-    protected final Game game;
-    protected final Objects objects;
+	protected final String name;
+	protected int x, y, width, height, speedX, speedY;
+	protected final Random random;
+	protected int baseSpeed;
+	protected Color color;
+	protected final Objects objects;
+	protected final Play play;
 
-    public GameObject(String name, int x, int y, int height, int width, int baseSpeed, Color color, Game game) {
-        this.name = name;
-        this.x = x;
-        this.y = y;
-        this.height = height;
-        this.width = width;
-        this.baseSpeed = baseSpeed;
-        this.color = color;
-        this.game = game;
-        this.objects = game.getObjects();
-        this.random = new Random();
-    }
+	public GameObject(String name, int x, int y, int height, int width, int baseSpeed, Color color, Play play) {
+		this.name = name;
+		this.x = x;
+		this.y = y;
+		this.height = height;
+		this.width = width;
+		this.baseSpeed = baseSpeed;
+		this.color = color;
+		this.objects = play.getObjects();
+		this.random = new Random();
+		this.play = play;
+	}
 
-    public abstract void update();
+	public abstract void update();
 
-    public abstract void render(Graphics g);
+	public abstract void render(Graphics g);
 
-    protected Rectangle getBounds() {
-        return new Rectangle(x, y, width, height);
-    }
+	protected Rectangle getBounds() {
+		return new Rectangle(x, y, width, height);
+	}
 
-    protected void move() {
-        x += speedX;
-        y += speedY;
-    }
+	protected void move() {
+		x += speedX;
+		y += speedY;
+	}
 
-    protected void walls() {
-        if (y <= 0 || y >= Window.getWindowHeight() - 32)
-            speedY *= -1;
+	protected void walls() {
+		if(y <= 0 || y >= Window.getWindowHeight() - 32)
+			speedY *= -1;
 
-        if (x <= 0 || x >= Window.getWindowWidth() - 32)
-            speedX *= -1;
-    }
+		if(x <= 0 || x >= Window.getWindowWidth() - 32)
+			speedX *= -1;
+	}
 
-    protected void drawBounds(Graphics g) {
-        Graphics2D graphics2D = (Graphics2D) g;
-        graphics2D.setColor(Color.white);
-        graphics2D.draw(getBounds());
-    }
+	protected void drawBounds(Graphics g) {
+		Graphics2D graphics2D = (Graphics2D) g;
+		graphics2D.setColor(Color.white);
+		graphics2D.draw(getBounds());
+	}
 
-    protected void remove() {
-        if (y > Window.getWindowHeight()) {
-            objects.removeObject(this);
-        }
-    }
+	protected void remove() {
+		if(y > Window.getWindowHeight()) {
+			objects.removeObject(this);
+		}
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public int getSpeedY() {
-        return speedY;
-    }
+	public int getSpeedY() {
+		return speedY;
+	}
 
-    public void setSpeedY(int speedY) {
-        this.speedY = speedY;
-    }
+	public void setSpeedY(int speedY) {
+		this.speedY = speedY;
+	}
 
-    public int getSpeedX() {
-        return speedX;
-    }
+	public int getSpeedX() {
+		return speedX;
+	}
 
-    public void setSpeedX(int speedX) {
-        this.speedX = speedX;
-    }
+	public void setSpeedX(int speedX) {
+		this.speedX = speedX;
+	}
 
-    public int getHeight() {
-        return height;
-    }
+	public int getHeight() {
+		return height;
+	}
 
-    public void setHeight(int height) {
-        this.height = height;
-    }
+	public void setHeight(int height) {
+		this.height = height;
+	}
 
-    public int getWidth() {
-        return width;
-    }
+	public int getWidth() {
+		return width;
+	}
 
-    public void setWidth(int width) {
-        this.width = width;
-    }
+	public void setWidth(int width) {
+		this.width = width;
+	}
 
-    public int getY() {
-        return y;
-    }
+	public int getY() {
+		return y;
+	}
 
-    public void setY(int y) {
-        this.y = y;
-    }
+	public void setY(int y) {
+		this.y = y;
+	}
 
-    public int getX() {
-        return x;
-    }
+	public int getX() {
+		return x;
+	}
 
-    public void setX(int x) {
-        this.x = x;
-    }
+	public void setX(int x) {
+		this.x = x;
+	}
 
-    public int getBaseSpeed() {
-        return baseSpeed;
-    }
+	public int getBaseSpeed() {
+		return baseSpeed;
+	}
 
-    public void setBaseSpeed(int baseSpeed) {
-        this.baseSpeed = baseSpeed;
-    }
+	public void setBaseSpeed(int baseSpeed) {
+		this.baseSpeed = baseSpeed;
+	}
 
-    public void updateSpeed() {
-        if (speedX != 0 && speedY != 0) {
-            speedX = (speedX / Math.abs(speedX)) * baseSpeed;
-            speedY = (speedY / Math.abs(speedY)) * baseSpeed;
-        }
-    }
+	public void updateSpeed() {
+		if(speedX != 0 && speedY != 0) {
+			speedX = (speedX / Math.abs(speedX)) * baseSpeed;
+			speedY = (speedY / Math.abs(speedY)) * baseSpeed;
+		}
+	}
 
 }

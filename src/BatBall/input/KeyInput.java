@@ -20,6 +20,7 @@
 
 package BatBall.input;
 
+import BatBall.gameStates.GameState;
 import BatBall.main.Game;
 import BatBall.objects.Ball;
 import BatBall.objects.Bat;
@@ -31,67 +32,75 @@ import java.awt.event.KeyEvent;
 
 public class KeyInput extends KeyAdapter {
 
-    private boolean[] keyDown = new boolean[]{false, false, false, false};
-    private final Objects objects;
-    private final Bat bat;
+	private boolean[] keyDown = new boolean[]{false, false, false, false};
+	private Objects objects;
+	private Bat bat;
 
-    public KeyInput(Game game) {
-        this.bat = game.getBat();
-        this.objects = game.getObjects();
-    }
+	@Override
+	public void keyPressed(KeyEvent e) {
+		int key = e.getKeyCode();
 
-    @Override
-    public void keyPressed(KeyEvent e) {
-        int key = e.getKeyCode();
+		switch (key) {
+			case KeyEvent.VK_ESCAPE:
+				if(Game.getInstance().getState().equals(GameState.Menu))
+					System.exit(1);
+				else
+					Game.getInstance().setState(GameState.Menu);
+				break;
+			case KeyEvent.VK_A:
+			case KeyEvent.VK_LEFT:
+				bat.setSpeedX(-bat.getBaseSpeed());
+				keyDown[0] = true;
+				break;
+			case KeyEvent.VK_D:
+			case KeyEvent.VK_RIGHT:
+				bat.setSpeedX(bat.getBaseSpeed());
+				keyDown[1] = true;
+				break;
+		}
 
-        switch (key) {
-            case KeyEvent.VK_ESCAPE:
-                System.exit(1);
-                break;
-            case KeyEvent.VK_A:
-            case KeyEvent.VK_LEFT:
-                bat.setSpeedX(-bat.getBaseSpeed());
-                keyDown[0] = true;
-                break;
-            case KeyEvent.VK_D:
-            case KeyEvent.VK_RIGHT:
-                bat.setSpeedX(bat.getBaseSpeed());
-                keyDown[1] = true;
-                break;
-        }
-
-        for (int i = 0; i < objects.getSize(); i++) {
-            GameObject temp = objects.getObject(i);
-            if (temp.getName().equals("ball")) {
-                if (key == KeyEvent.VK_SPACE || key == KeyEvent.VK_A || key == KeyEvent.VK_LEFT || key == KeyEvent.VK_D || key == KeyEvent.VK_RIGHT) {
-                    Ball ball = (Ball) objects.getObject(i);
-                    ball.setDocked(false);
-                }
-            }
-        }
-    }
+		for (int i = 0; i < objects.getSize(); i++) {
+			GameObject temp = objects.getObject(i);
+			if(temp.getName().equals("ball")) {
+				if(key == KeyEvent.VK_SPACE || key == KeyEvent.VK_A || key == KeyEvent.VK_LEFT || key == KeyEvent.VK_D || key == KeyEvent.VK_RIGHT) {
+					Ball ball = (Ball) objects.getObject(i);
+					ball.setDocked(false);
+				}
+			}
+		}
+	}
 
 
-    @Override
-    public void keyReleased(KeyEvent e) {
-        int key = e.getKeyCode();
+	@Override
+	public void keyReleased(KeyEvent e) {
+		int key = e.getKeyCode();
 
-        switch (key) {
-            case KeyEvent.VK_A:
-            case KeyEvent.VK_LEFT:
-                keyDown[0] = false;
-                break;
-            case KeyEvent.VK_D:
-            case KeyEvent.VK_RIGHT:
-                keyDown[1] = false;
-                break;
-        }
+		switch (key) {
+			case KeyEvent.VK_A:
+			case KeyEvent.VK_LEFT:
+				keyDown[0] = false;
+				break;
+			case KeyEvent.VK_D:
+			case KeyEvent.VK_RIGHT:
+				keyDown[1] = false;
+				break;
+		}
 
 
-        if (!keyDown[0] && !keyDown[1]) bat.setSpeedX(0);
+		if(!keyDown[0] && !keyDown[1]) bat.setSpeedX(0);
 
-        if (!keyDown[0] && keyDown[1]) bat.setSpeedX(bat.getBaseSpeed());
-        if (keyDown[0] && !keyDown[1]) bat.setSpeedX(-bat.getBaseSpeed());
-    }
+		if(!keyDown[0] && keyDown[1]) bat.setSpeedX(bat.getBaseSpeed());
+		if(keyDown[0] && !keyDown[1]) bat.setSpeedX(-bat.getBaseSpeed());
+	}
+
+	public void linkBat(){
+		objects = Game.getInstance().getPlay().getObjects();
+		for(int i = 0; i<objects.getSize(); i++){
+			if(objects.getObject(i).getName().equals("bat")){
+				bat = (Bat)objects.getObject(i);
+				break;
+			}
+		}
+	}
 
 }

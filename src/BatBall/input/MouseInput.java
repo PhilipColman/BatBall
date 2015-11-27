@@ -1,8 +1,8 @@
 /**
- * Created by philip on 23/11/15.
+ * Created by Philip on 26/11/2015.
  * <p/>
  * BatBall is a basic bat ball game.
- * Copyright (C) 2015  philip
+ * Copyright (C) 2015  Philip
  * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,46 +18,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package BatBall.objects;
+package BatBall.input;
 
-import java.awt.Graphics;
-import java.util.LinkedList;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-public class Objects {
+public class MouseInput extends MouseAdapter {
 
-	private LinkedList<GameObject> objects = new LinkedList<GameObject>();
+	private int x = 0, y = 0;
 
-	public Objects() {
-
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		x = e.getX();
+		y = e.getY();
 	}
 
-	public void update() {
-		for (int i = 0; i < objects.size(); i++) {
-			GameObject temp = objects.get(i);
-			temp.update();
-		}
+	public int getX() {
+		return x;
 	}
 
-	public void render(Graphics g) {
-		for (GameObject temp : objects) {
-			temp.render(g);
-		}
+	public int getY() {
+		return y;
 	}
 
-	public void addObject(GameObject object) {
-		objects.add(object);
+	public void setX(int x) {
+		this.x = x;
 	}
 
-	public int getSize() {
-		return objects.size();
+	public void setY(int y) {
+		this.y = y;
 	}
-
-	public void removeObject(GameObject object) {
-		objects.remove(object);
-	}
-
-	public GameObject getObject(int i) {
-		return objects.get(i);
-	}
-
 }

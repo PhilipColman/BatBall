@@ -20,11 +20,11 @@
 
 package BatBall.main;
 
+import BatBall.gameStates.GameState;
+import BatBall.gameStates.Menu;
+import BatBall.gameStates.Play;
 import BatBall.input.KeyInput;
-import BatBall.objects.Ball;
-import BatBall.objects.Bat;
-import BatBall.objects.Brick;
-import BatBall.objects.Objects;
+import BatBall.input.MouseInput;
 
 import java.awt.Canvas;
 import java.awt.Color;
@@ -33,131 +33,163 @@ import java.awt.image.BufferStrategy;
 
 public class Game extends Canvas implements Runnable {
 
-    private boolean running = false;
-    private int frames = 0;
-    private int fps, ups;
-    private int updates = 0;
+	private boolean running = false;
+	private int frames = 0;
+	private int updates = 0;
 
-    private final Window window;
-    private Thread thread;
+	private static Game instance;
 
-    private final Objects objects;
-    private final Bat bat;
+	private final Window window;
+	private Thread thread;
 
-    public Game() {
-        bat = new Bat(this);
-        objects = new Objects();
-        objects.addObject(bat);
-        objects.addObject(new Ball(bat.getX() + bat.getWidth() / 2 - 16, bat.getY() - 32, this));
-        this.addKeyListener(new KeyInput(this));
+	private GameState state = GameState.Menu;
+	private final Menu menu;
+	private Play play;
 
-        Color[] colors = new Color[]{
-                Color.red, //1
-                Color.blue, //2
-                Color.cyan, //3
-                Color.DARK_GRAY, //4
-                Color.magenta, //5
-                Color.orange, //6
-        };
+	private final MouseInput mouseInput;
+	private final KeyInput keyInput;
 
-        boolean[] hard = new boolean[]{
-                true, //1
-                true, //2
-                true, //3
-                false, //4
-                false, //5
-                false //6
-        };
-        for (int y = 0; y < 6; y++) {
-            for (int x = 0; x < 20; x++) {
-                objects.addObject(new Brick(x * (Window.getWindowWidth()) / 20, y * 30, Window.getWindowWidth() / 20, 30, colors[y], hard[y], this));
-            }
-        }
+	public static void main(String[] args) {
+		instance = new Game();
+	}
 
-        window = new Window(this);
+	public Game() {
 
-        start();
-    }
+		mouseInput = new MouseInput();
+		menu = new Menu();
+		keyInput = new KeyInput();
 
-    public static void main(String[] args) {
-        new Game();
-    }
 
-    @Override
-    public void run() {
-        this.requestFocus();
+		addKeyListener(keyInput);
+		addMouseListener(mouseInput);
 
-        long lastTime = System.nanoTime();
-        double amountOfUpdates = 60.0;
-        double ns = 1000000000 / amountOfUpdates;
-        double delta = 0;
-        long timer = System.currentTimeMillis();
-        while (running) {
-            long now = System.nanoTime();
-            delta += (now - lastTime) / ns;
-            lastTime = now;
-            while (delta >= 1) {
-                update();
-                delta--;
-                updates++;
-            }
-            if (running) {
-                render();
-                frames++;
-            }
-            if (System.currentTimeMillis() - timer > 1000) {
-                timer += 1000;
-                fps = frames;
-                frames = 0;
-                ups = updates;
-                updates = 0;
-                window.setTitle(String.format("Bat and Ball   |   UPS: %1$d  FPS: %2$d", ups, fps));
-            }
-        }
-        stop();
-    }
+		window = new Window(this);
 
-    private void render() {
-        BufferStrategy bs = getBufferStrategy();
-        if (bs == null) {
-            createBufferStrategy(3);
-            return;
-        }
-        Graphics g = bs.getDrawGraphics();
+		start();
+	}
 
-        g.setColor(Color.black);
-        g.fillRect(0, 0, Window.getWindowWidth(), Window.getWindowWidth());
 
-        objects.render(g);
 
-        g.dispose();
-        bs.show();
-    }
+	@Override
+	public void run() {
+		this.requestFocus();
 
-    private void update() {
-        objects.update();
-    }
+		long lastTime = System.nanoTime();
+		double amountOfUpdates = 60.0;
+		double ns = 1000000000 / amountOfUpdates;
+		double delta = 0;
+		long timer = System.currentTimeMillis();
+		while (running) {
+			long now = System.nanoTime();
+			delta += (now - lastTime) / ns;
+			lastTime = now;
+			while (delta >= 1) {
+				update();
+				delta--;
+				updates++;
+			}
+			if(running) {
+				render();
+				frames++;
+			}
+			if(System.currentTimeMillis() - timer > 1000) {
+				timer += 1000;
+				int fps = frames;
+				frames = 0;
+				int ups = updates;
+				updates = 0;
+				window.setTitle(String.format("Bat and Ball   |   UPS: %1$d  FPS: %2$d", ups, fps));
+			}
+		}
+		stop();
+	}
 
-    private synchronized void start() {
-        running = true;
-        this.thread = new Thread(this, "Main Thread");
-        thread.start();
-    }
+	private void render() {
+		BufferStrategy bs = getBufferStrategy();
+		if(bs == null) {
+			createBufferStrategy(3);
+			return;
+		}
+		Graphics g = bs.getDrawGraphics();
 
-    private synchronized void stop() {
-        running = false;
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
+		g.setColor(Color.black);
+		g.fillRect(0, 0, Window.getWindowWidth(), Window.getWindowWidth());
 
-    public Objects getObjects() {
-        return objects;
-    }
+		switch (state) {
+			case Menu:
+				menu.render(g);
+				break;
+			case Game:
+				play.render(g);
+				break;
+			case Options:
+				break;
+			case LevelScreen:
+				break;
+			case LevelEnd:
+				break;
+		}
 
-    public Bat getBat() {
-        return bat;
-    }
+		g.dispose();
+		bs.show();
+	}
+
+	private void update() {
+		switch (state) {
+			case Menu:
+				break;
+			case Game:
+				play.update();
+				break;
+			case Options:
+				break;
+			case LevelScreen:
+				break;
+			case LevelEnd:
+				break;
+		}
+	}
+
+	private synchronized void start() {
+		running = true;
+		this.thread = new Thread(this, "Main Thread");
+		thread.start();
+	}
+
+	private synchronized void stop() {
+		running = false;
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public MouseInput getMouseInput() {
+		return mouseInput;
+	}
+
+	public GameState getState() {
+		return state;
+	}
+
+	public void setState(GameState state) {
+		this.state = state;
+	}
+
+	public void setPlay(Play play) {
+		this.play= play;
+	}
+
+	public Play getPlay() {
+		return play;
+	}
+
+	public KeyInput getKeyInput() {
+		return keyInput;
+	}
+
+	public static Game getInstance() {
+		return instance;
+	}
 }

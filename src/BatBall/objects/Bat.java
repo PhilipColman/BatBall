@@ -20,7 +20,7 @@
 
 package BatBall.objects;
 
-import BatBall.main.Game;
+import BatBall.gameStates.Play;
 import BatBall.main.Window;
 
 import java.awt.Color;
@@ -30,58 +30,58 @@ import java.util.LinkedList;
 
 public class Bat extends GameObject {
 
-    private LinkedList<Upgrade> currentUpgrades = new LinkedList<Upgrade>();
+	private LinkedList<Upgrade> currentUpgrades = new LinkedList<Upgrade>();
 
-    public Bat(Game game) {
-        super("bat", 0, 0, 20, 200, 4, Color.gray, game);
-        x = Window.getWindowWidth() / 2 - width / 2;
-        y = Window.getWindowHeight() - 100 - height;
-    }
+	public Bat(Play play) {
+		super("bat", 0, 0, 20, 200, 4, Color.gray, play);
+		x = Window.getWindowWidth() / 2 - width / 2;
+		y = Window.getWindowHeight() - 100 - height;
+	}
 
-    @Override
-    public void update() {
-        move();
-        x = clampToWindow(x, 32, Window.getWindowWidth() - width - 32);
+	@Override
+	public void update() {
+		move();
+		x = clampToWindow(x, 32, Window.getWindowWidth() - width - 32);
 
-        for (int i = 0; i < currentUpgrades.size(); i++) {
-            currentUpgrades.get(i).update();
-        }
-    }
+		for (int i = 0; i < currentUpgrades.size(); i++) {
+			currentUpgrades.get(i).update();
+		}
+	}
 
-    @Override
-    public void render(Graphics g) {
-        g.setColor(color);
-        g.fillRect(x, y, width, height);
-        g.setColor(Color.lightGray);
-        g.drawRect(x, y, width, height);
-        drawBounds(g);
-    }
+	@Override
+	public void render(Graphics g) {
+		g.setColor(color);
+		g.fillRect(x, y, width, height);
+		g.setColor(Color.lightGray);
+		g.drawRect(x, y, width, height);
+		drawBounds(g);
+	}
 
-    private int clampToWindow(int var, int min, int max) {
-        if (var >= max) return max;
-        else if (var <= min) return min;
-        else return var;
-    }
+	private int clampToWindow(int var, int min, int max) {
+		if(var >= max) return max;
+		else if(var <= min) return min;
+		else return var;
+	}
 
-    @Override
-    protected Rectangle getBounds() {
-        return new Rectangle(x, y, width, 1);
-    }
+	@Override
+	protected Rectangle getBounds() {
+		return new Rectangle(x, y, width, 1);
+	}
 
-    public void addUpgrade(Upgrade upgrade) {
-        currentUpgrades.add(upgrade);
-    }
+	public void addUpgrade(Upgrade upgrade) {
+		currentUpgrades.add(upgrade);
+	}
 
-    public int upgradeCount() {
-        return currentUpgrades.size();
-    }
+	public int upgradeCount() {
+		return currentUpgrades.size();
+	}
 
-    public void removeUpgrade(Upgrade upgrade) {
-        currentUpgrades.remove(upgrade);
-    }
+	public void removeUpgrade(Upgrade upgrade) {
+		currentUpgrades.remove(upgrade);
+	}
 
-    public Upgrade getUpgrade(int i) {
-        return currentUpgrades.get(i);
-    }
+	public Upgrade getUpgrade(int i) {
+		return currentUpgrades.get(i);
+	}
 
 }

@@ -1,5 +1,5 @@
 /**
- * Created by philip on 23/11/15.
+ * Created by philip on 25/11/15.
  * <p/>
  * BatBall is a basic bat ball game.
  * Copyright (C) 2015  philip
@@ -18,46 +18,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package BatBall.objects;
+package BatBall.levels;
 
-import java.awt.Graphics;
-import java.util.LinkedList;
+import BatBall.main.Game;
+import BatBall.objects.Brick;
+import BatBall.objects.Objects;
 
-public class Objects {
+public abstract class BaseLevel {
 
-	private LinkedList<GameObject> objects = new LinkedList<GameObject>();
+    protected final String name;
+    protected final int upgradeWegith;
+    protected Brick bricks[];
+    protected Objects objects;
+    protected int startTime;
 
-	public Objects() {
+    public BaseLevel(String name, Brick[] bricks, int upgradeWegith, Game game) {
+        this.name = name;
+        this.bricks = bricks;
+        this.upgradeWegith = upgradeWegith;
+        //this.objects = game.getObjects();
+    }
 
-	}
+    protected void loadLevel() {
+        for (Brick brick : bricks) {
+            objects.addObject(brick);
+        }
+    }
 
-	public void update() {
-		for (int i = 0; i < objects.size(); i++) {
-			GameObject temp = objects.get(i);
-			temp.update();
-		}
-	}
+    protected void unloadLevel() {
 
-	public void render(Graphics g) {
-		for (GameObject temp : objects) {
-			temp.render(g);
-		}
-	}
-
-	public void addObject(GameObject object) {
-		objects.add(object);
-	}
-
-	public int getSize() {
-		return objects.size();
-	}
-
-	public void removeObject(GameObject object) {
-		objects.remove(object);
-	}
-
-	public GameObject getObject(int i) {
-		return objects.get(i);
-	}
-
+    }
 }

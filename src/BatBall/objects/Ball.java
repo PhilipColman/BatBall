@@ -20,7 +20,7 @@
 
 package BatBall.objects;
 
-import BatBall.main.Game;
+import BatBall.gameStates.Play;
 import BatBall.main.Window;
 
 import java.awt.Color;
@@ -28,110 +28,106 @@ import java.awt.Graphics;
 
 public class Ball extends GameObject {
 
-    private final Objects objects;
-    private boolean docked;
-    private final Bat bat;
-    private static int balls = 1, left = 99;
+	private boolean docked;
+	private final Bat bat;
+	private static int balls = 1, left = 99;
 
-    public Ball(int x, int y, Game game) {
-        super("ball", x, y, 32, 32, 4, Color.white, game);
-        this.docked = true;
-        this.bat = game.getBat();
-        this.objects = game.getObjects();
-        //System.out.print("Ball Made");
-    }
+	public Ball(int x, int y, Play play) {
+		super("ball", x, y, 32, 32, 4, Color.white, play);
+		bat = play.getBat();
+		this.docked = true;
+	}
 
-    @Override
-    public void update() {
+	@Override
+	public void update() {
 
-        if (!isDocked()) {
-            if (speedX == 0 && speedY == 0) {
-                speedX = random.nextBoolean() ? 1 : -1 * baseSpeed;
-                speedY = random.nextBoolean() ? 1 : -1 * baseSpeed;
-            }
-            move();
-        }
-        walls();
-        hitBat();
-        hitBrick();
-        remove();
-    }
+		if(!isDocked()) {
+			if(speedX == 0 && speedY == 0) {
+				speedX = random.nextBoolean() ? 1 : -1 * baseSpeed;
+				speedY = random.nextBoolean() ? 1 : -1 * baseSpeed;
+			}
+			move();
+		}
+		walls();
+		hitBat();
+		hitBrick();
+		remove();
+	}
 
-    @Override
-    public void render(Graphics g) {
-        g.setColor(color);
-        g.fillOval(x, y, width, height);
-        drawBounds(g);
-    }
+	@Override
+	public void render(Graphics g) {
+		g.setColor(color);
+		g.fillOval(x, y, width, height);
+		drawBounds(g);
+	}
 
-    private void hitBat() {
-        if (getBounds().intersects(bat.getBounds())) {
-            speedY *= -1;
-        }
-    }
+	private void hitBat() {
+		if(getBounds().intersects(bat.getBounds())) {
+			speedY *= -1;
+		}
+	}
 
-    private void hitBrick() {
-        for (int i = 0; i < objects.getSize(); i++) {
-            GameObject temp = objects.getObject(i);
-            if (temp.name.equals("brick")) {
-                if (getBounds().intersects(temp.getBounds())) {
-                    Brick brick = (Brick) objects.getObject(i);
-                    if (brick.isHard()) {
-                        brick.setHard(false);
-                    } else {
-                        if (brick.hasUpgrade())
-                            objects.addObject(brick.getUpgrade());
-                        objects.removeObject(brick);
-                    }
-                    speedY *= -1;
-                    break;
-                }
-            }
-        }
-    }
+	private void hitBrick() {
+		for (int i = 0; i < objects.getSize(); i++) {
+			GameObject temp = objects.getObject(i);
+			if(temp.name.equals("brick")) {
+				if(getBounds().intersects(temp.getBounds())) {
+					Brick brick = (Brick) objects.getObject(i);
+					if(brick.isHard()) {
+						brick.setHard(false);
+					} else {
+						if(brick.hasUpgrade())
+							objects.addObject(brick.getUpgrade());
+						objects.removeObject(brick);
+					}
+					speedY *= -1;
+					break;
+				}
+			}
+		}
+	}
 
-    @Override
-    protected void walls() {
-        if (y <= 0)
-            speedY *= -1;
+	@Override
+	protected void walls() {
+		if(y <= 0)
+			speedY *= -1;
 
-        if (x <= 0 || x >= Window.getWindowWidth() - 32)
-            speedX *= -1;
-    }
+		if(x <= 0 || x >= Window.getWindowWidth() - 32)
+			speedX *= -1;
+	}
 
-    @Override
-    protected void remove() {
-        if (y > Window.getWindowHeight()) {
-            if (balls == 1 && left > 0) {
-                left--;
-                objects.addObject(new Ball(bat.getX() + bat.getWidth() / 2 - 16, bat.getY() - 32, game));
-            } else if (balls > 1)
-                balls--;
-            objects.removeObject(this);
-            for (int index = 0; index < bat.upgradeCount(); index++) {
-                Upgrade tempUpgrade = bat.getUpgrade(index);
-                if (tempUpgrade.getEffects() == Upgrade.Effects.Ball) {
-                    bat.removeUpgrade(tempUpgrade);
-                }
-            }
-        }
-    }
+	@Override
+	protected void remove() {
+		if(y > Window.getWindowHeight()) {
+			if(balls == 1 && left > 0) {
+				left--;
+				objects.addObject(new Ball(bat.getX() + bat.getWidth() / 2 - 16, bat.getY() - 32, play));
+			} else if(balls > 1)
+				balls--;
+			objects.removeObject(this);
+			for (int index = 0; index < bat.upgradeCount(); index++) {
+				Upgrade tempUpgrade = bat.getUpgrade(index);
+				if(tempUpgrade.getEffects() == Upgrade.Effects.Ball) {
+					bat.removeUpgrade(tempUpgrade);
+				}
+			}
+		}
+	}
 
-    public boolean isDocked() {
-        return docked;
-    }
+	public boolean isDocked() {
+		return docked;
+	}
 
-    public void setDocked(boolean docked) {
-        this.docked = docked;
-    }
+	public void setDocked(boolean docked) {
+		this.docked = docked;
+	}
 
 
-    public static void setBalls(int balls) {
-        Ball.balls = balls;
-    }
+	public static void setBalls(int balls) {
+		Ball.balls = balls;
+	}
 
-    public static int getBalls() {
-        return balls;
-    }
-
+	public static int getBalls() {
+		return balls;
+	}
 }

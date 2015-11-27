@@ -1,5 +1,5 @@
 /**
- * Created by philip on 23/11/15.
+ * Created by philip on 25/11/15.
  * <p/>
  * BatBall is a basic bat ball game.
  * Copyright (C) 2015  philip
@@ -18,46 +18,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package BatBall.objects;
+package BatBall.gameStates;
 
-import java.awt.Graphics;
-import java.util.LinkedList;
+public enum GameState {
 
-public class Objects {
-
-	private LinkedList<GameObject> objects = new LinkedList<GameObject>();
-
-	public Objects() {
-
-	}
-
-	public void update() {
-		for (int i = 0; i < objects.size(); i++) {
-			GameObject temp = objects.get(i);
-			temp.update();
-		}
-	}
-
-	public void render(Graphics g) {
-		for (GameObject temp : objects) {
-			temp.render(g);
-		}
-	}
-
-	public void addObject(GameObject object) {
-		objects.add(object);
-	}
-
-	public int getSize() {
-		return objects.size();
-	}
-
-	public void removeObject(GameObject object) {
-		objects.remove(object);
-	}
-
-	public GameObject getObject(int i) {
-		return objects.get(i);
-	}
+	Menu,
+	Options,
+	LevelScreen,
+	Game,
+	LevelEnd
 
 }

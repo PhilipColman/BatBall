@@ -20,6 +20,7 @@
 
 package BatBall.objects;
 
+import BatBall.gameStates.Play;
 import BatBall.main.Game;
 
 import java.awt.Color;
@@ -27,165 +28,167 @@ import java.awt.Graphics;
 
 public class Upgrade extends GameObject {
 
-    private long end;
-    private long length;
-    private Effects effects;
-    private final Bat bat;
-    private boolean running;
-    private final Upgrades id;
-    private boolean update = true;
+	private long end;
+	private long length;
+	private Effects effects;
+	private final Bat bat;
+	private boolean running;
+	private final Upgrades id;
+	private boolean update = true;
 
 
-    public Upgrade(Upgrades name, int x, int y, Game game) {
-        super(name.toString(), x, y, 64, 64, 1, null, game);
-        this.bat = game.getBat();
-        this.running = false;
-        this.id = name;
-        switch (name) {
-            case Speed:
-                Speed();
-                break;
-            case Extend:
-                Extend();
-                break;
-            case ExtraBalls:
-                ExtraBalls();
-                break;
-        }
-        speedY = baseSpeed;
-    }
+	public Upgrade(Upgrades name, int x, int y, Play play) {
+		super(name.toString(), x, y, 64, 64, 1, null, play);
+		this.bat = play.getBat();
+		this.running = false;
+		this.id = name;
+		switch (name) {
+			case Speed:
+				Speed();
+				break;
+			case Extend:
+				Extend();
+				break;
+			case ExtraBalls:
+				ExtraBalls();
+				break;
+		}
+		speedY = baseSpeed;
+	}
 
-    private void Speed() {
-        this.color = Color.yellow;
-        this.effects = Effects.Ball;
-        this.length = 60 * 1000;
-    }
+	private void Speed() {
+		this.color = Color.yellow;
+		this.effects = Effects.Ball;
+		this.length = 60 * 1000;
+	}
 
-    private void Extend() {
-        this.color = Color.red;
-        this.effects = Effects.Bat;
-        this.length = 30 * 1000;
-    }
+	private void Extend() {
+		this.color = Color.red;
+		this.effects = Effects.Bat;
+		this.length = 30 * 1000;
+	}
 
-    private void ExtraBalls(){
-        this.color = Color.blue;
-        this.effects = Effects.Ball;
-        this.length = 1 * 1000;
-    }
+	private void ExtraBalls() {
+		this.color = Color.blue;
+		this.effects = Effects.Ball;
+		this.length = 1 * 1000;
+	}
 
-    @Override
-    public void update() {
-        move();
-        hitBat();
-        remove();
-        if (running) {
-            if (System.currentTimeMillis() <= this.end) {
-                if(update){
-                    runEffect();
-                }
+	@Override
+	public void update() {
+		move();
+		hitBat();
+		remove();
+		if(running) {
+			if(System.currentTimeMillis() <= this.end) {
+				if(update) {
+					runEffect();
+				}
 
-            } else {
-                running = false;
-                bat.removeUpgrade(this);
-                removeEffect();
-            }
-        }
-    }
+			} else {
+				running = false;
+				bat.removeUpgrade(this);
+				removeEffect();
+			}
+		}
+	}
 
-    private void runEffect(){
-        switch (id) {
-            case Speed:
-                for (int i = 0; i < objects.getSize(); i++) {
-                    GameObject temp = objects.getObject(i);
-                    if (temp.getName().equals("ball")) {
-                        temp.setBaseSpeed(6);
-                        temp.updateSpeed();
-                        update = false;
-                    }
-                }
-                break;
-            case Extend:
-                bat.setWidth(300);
-                bat.setX(bat.getX() - 50);
-                update = false;
-                break;
-            case ExtraBalls:
-                Ball.setBalls(Ball.getBalls()+2);
-                Ball ball = new Ball(bat.getX() + bat.getWidth() / 2 - 16, bat.getY() - 32, game);
-                ball.setDocked(false);
-                objects.addObject(ball);
-                ball = new Ball(bat.getX() + bat.getWidth() / 2 - 16, bat.getY() - 32, game);
-                ball.setDocked(false);
-                objects.addObject(ball);
-                break;
-        }
+	private void runEffect() {
+		switch (id) {
+			case Speed:
+				for (int i = 0; i < objects.getSize(); i++) {
+					GameObject temp = Game.getInstance().getPlay().getObjects().getObject(i);
+					if(temp.getName().equals("ball")) {
+						temp.setBaseSpeed(6);
+						temp.updateSpeed();
+						update = false;
+					}
+				}
+				break;
+			case Extend:
+				play.getBat().setWidth(300);
+				play.getBat().setX(bat.getX() - 50);
+				update = false;
+				break;
+			case ExtraBalls:
+				Ball.setBalls(Ball.getBalls() + 2);
+				Ball ball = new Ball(bat.getX() + bat.getWidth() / 2 - 16, bat.getY() - 32, play);
+				ball.setDocked(false);
+				objects.addObject(ball);
+				ball = new Ball(bat.getX() + bat.getWidth() / 2 - 16, bat.getY() - 32, play);
+				ball.setDocked(false);
+				objects.addObject(ball);
+				update = false;
+				break;
+		}
 
-    }
+	}
 
-    private void removeEffect() {
-        switch (id) {
-            case Speed:
-                for (int i = 0; i < objects.getSize(); i++) {
-                    GameObject temp = objects.getObject(i);
-                    if (temp.getName().equals("ball")) {
-                        temp.setBaseSpeed(5);
-                        temp.updateSpeed();
-                    }
-                }
-                break;
-            case Extend:
-                bat.setWidth(200);
-                bat.setX(bat.getX() + 50);
-                break;
-        }
-    }
+	private void removeEffect() {
+		switch (id) {
+			case Speed:
+				for (int i = 0; i < objects.getSize(); i++) {
+					GameObject temp = objects.getObject(i);
+					if(temp.getName().equals("ball")) {
+						temp.setBaseSpeed(5);
+						temp.updateSpeed();
+					}
+				}
+				break;
+			case Extend:
+				bat.setWidth(200);
+				bat.setX(bat.getX() + 50);
+				break;
+		}
+	}
 
-    @Override
-    public void render(Graphics g) {
-        g.setColor(color);
-        g.fillRect(x, y, width, height);
-    }
+	@Override
+	public void render(Graphics g) {
+		g.setColor(color);
+		g.fillRect(x, y, width, height);
+	}
 
-    private void hitBat() {
-        if (getBounds().intersects(bat.getBounds())) {
-            if (bat.upgradeCount() == 0) {
-                bat.addUpgrade(this);
-                this.running = true;
-            } else {
-                for (int i = 0; i < bat.upgradeCount(); i++) {
-                    Upgrade temp = bat.getUpgrade(i);
-                    if (temp.id.equals(this.id)) {
-                        temp.setEnd(System.currentTimeMillis() + this.length);
-                    } else {
-                        bat.addUpgrade(this);
-                        this.running = true;
-                    }
-                }
-            }
-            objects.removeObject(this);
-        }
-    }
+	private void hitBat() {
+		if(getBounds().intersects(bat.getBounds())) {
+			this.setEnd(System.currentTimeMillis() + this.length);
+			if(bat.upgradeCount() == 0) {
+				bat.addUpgrade(this);
+				this.running = true;
+			} else {
+				for (int i = 0; i < bat.upgradeCount(); i++) {
+					Upgrade temp = bat.getUpgrade(i);
+					if(temp.id.equals(this.id)) {
+						temp.setEnd(System.currentTimeMillis() + this.length);
+					} else {
+						bat.addUpgrade(this);
+						this.running = true;
+					}
+				}
+			}
+			objects.removeObject(this);
+		}
+	}
 
-    public void setEnd(long end) {
-        this.end = end;
-    }
+	public void setEnd(long end) {
+		this.end = end;
+	}
 
-    public Effects getEffects() {
-        return effects;
-    }
+	public Effects getEffects() {
+		return effects;
+	}
 
-    public long getEnd() {
-        return end;
-    }
+	public long getEnd() {
+		return end;
+	}
 
-    public enum Upgrades {
-        Speed,
-        Extend,
-        ExtraBalls
-    }
+	public enum Upgrades {
+		Speed,
+		Extend,
+		ExtraBalls
+	}
 
-    public enum Effects {
-        Ball,
-        Bat
-    }
+	public enum Effects {
+		Ball,
+		Bat
+	}
 }
