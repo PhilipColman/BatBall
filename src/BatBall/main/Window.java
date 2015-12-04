@@ -1,8 +1,8 @@
 /**
- * Created by philip on 23/11/15.
+ * Created by Philip on 27/11/2015.
  * <p/>
- * BatBall is a basic bat ball game.
- * Copyright (C) 2015  philip
+ * BatBall2 is a basic bat ball game.
+ * Copyright (C) 2015  Philip
  * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,22 +28,24 @@ public class Window extends JFrame {
 
 	private static final Toolkit toolkit = Toolkit.getDefaultToolkit();
 
-	public Window(Game game) {
+	public Window(Main game) {
 		super("Bat and Ball");
-		//this.setUndecorated(true);
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		this.setLocationRelativeTo(null);
+		this.setUndecorated(true);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		//this.setResizable(false);
+
+		this.setResizable(false);
 		this.add(game);
 		this.setVisible(true);
 	}
 
 	public static int getWindowWidth() {
+		//System.out.println(toolkit.getScreenResolution());
 		return (int) toolkit.getScreenSize().getWidth();
 	}
 
 	public static int getWindowHeight() {
 		return (int) toolkit.getScreenSize().getHeight();
 	}
+
 }

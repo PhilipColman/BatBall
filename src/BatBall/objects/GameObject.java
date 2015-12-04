@@ -1,26 +1,24 @@
 /**
- * Created by philip on 23/11/15.
- * <p/>
  * BatBall is a basic bat ball game.
  * Copyright (C) 2015  philip
- * <p/>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * <p/>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p/>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package BatBall.objects;
 
-import BatBall.gameStates.Play;
+import BatBall.levels.BaseLevel;
 import BatBall.main.Window;
 
 import java.awt.Color;
@@ -36,10 +34,10 @@ public abstract class GameObject {
 	protected final Random random;
 	protected int baseSpeed;
 	protected Color color;
-	protected final Objects objects;
-	protected final Play play;
+	protected Objects objects;
+	protected BaseLevel level;
 
-	public GameObject(String name, int x, int y, int height, int width, int baseSpeed, Color color, Play play) {
+	public GameObject(String name, int x, int y, int height, int width, int baseSpeed, Color color, BaseLevel level) {
 		this.name = name;
 		this.x = x;
 		this.y = y;
@@ -47,9 +45,8 @@ public abstract class GameObject {
 		this.width = width;
 		this.baseSpeed = baseSpeed;
 		this.color = color;
-		this.objects = play.getObjects();
 		this.random = new Random();
-		this.play = play;
+		this.objects = (level != null ? level.getObjects() : null);
 	}
 
 	public abstract void update();
@@ -83,6 +80,12 @@ public abstract class GameObject {
 		if(y > Window.getWindowHeight()) {
 			objects.removeObject(this);
 		}
+	}
+
+	protected int clampToWindow(int var, int min, int max) {
+		if (var >= max) return max;
+		else if (var <= min) return min;
+		else return var;
 	}
 
 	public String getName() {

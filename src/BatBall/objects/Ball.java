@@ -1,47 +1,54 @@
 /**
- * Created by philip on 23/11/15.
- * <p/>
  * BatBall is a basic bat ball game.
  * Copyright (C) 2015  philip
- * <p/>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * <p/>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p/>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package BatBall.objects;
 
-import BatBall.gameStates.Play;
+import BatBall.input.KeyInput;
+import BatBall.levels.BaseLevel;
+import BatBall.main.Main;
 import BatBall.main.Window;
+import BatBall.states.End;
+import BatBall.states.State;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 
 public class Ball extends GameObject {
 
 	private boolean docked;
 	private final Bat bat;
-	private static int balls = 1, left = 99;
+	private BaseLevel level;
 
-	public Ball(int x, int y, Play play) {
-		super("ball", x, y, 32, 32, 4, Color.white, play);
-		bat = play.getBat();
+	public Ball(int x, int y, BaseLevel level) {
+		super("ball", x, y, 32, 32, 4, Color.white, level);
+		this.level = level;
+		this.objects = level.getObjects();
+		this.bat = level.getBat();
 		this.docked = true;
 	}
 
 	@Override
 	public void update() {
+		if (docked)
+			docked = !(KeyInput.getKeys()[KeyEvent.VK_SPACE] || KeyInput.getKeys()[KeyEvent.VK_LEFT] || KeyInput.getKeys()[KeyEvent.VK_RIGHT] || KeyInput.getKeys()[KeyEvent.VK_A] || KeyInput.getKeys()[KeyEvent.VK_D]);
 
-		if(!isDocked()) {
+		if (!docked) {
 			if(speedX == 0 && speedY == 0) {
 				speedX = random.nextBoolean() ? 1 : -1 * baseSpeed;
 				speedY = random.nextBoolean() ? 1 : -1 * baseSpeed;
@@ -76,8 +83,8 @@ public class Ball extends GameObject {
 					if(brick.isHard()) {
 						brick.setHard(false);
 					} else {
-						if(brick.hasUpgrade())
-							objects.addObject(brick.getUpgrade());
+						level.setBricksLeft(level.getBricksLeft() - 1);
+						level.setScore(level.getScore() + 10);
 						objects.removeObject(brick);
 					}
 					speedY *= -1;
@@ -99,35 +106,18 @@ public class Ball extends GameObject {
 	@Override
 	protected void remove() {
 		if(y > Window.getWindowHeight()) {
-			if(balls == 1 && left > 0) {
-				left--;
-				objects.addObject(new Ball(bat.getX() + bat.getWidth() / 2 - 16, bat.getY() - 32, play));
-			} else if(balls > 1)
-				balls--;
-			objects.removeObject(this);
-			for (int index = 0; index < bat.upgradeCount(); index++) {
-				Upgrade tempUpgrade = bat.getUpgrade(index);
-				if(tempUpgrade.getEffects() == Upgrade.Effects.Ball) {
-					bat.removeUpgrade(tempUpgrade);
-				}
+			if (level.getBalls() == 1 && level.getLifes() > 0) {
+				level.setLifes(level.getLifes() - 1);
+				level.setScore(level.getScore() > 50 ? (level.getScore() - 50) : 0);
+				objects.addObject(new Ball(bat.getX() + bat.getWidth() / 2 - 16, bat.getY() - 32, level));
+			} else if (level.getBalls() > 1)
+				level.setBalls(level.getBalls() - 1);
+			else {
+				State.End.setData(false);
+				Main.getInstance().setEnd(new End());
+				Main.getInstance().setState(State.End);
 			}
+			objects.removeObject(this);
 		}
-	}
-
-	public boolean isDocked() {
-		return docked;
-	}
-
-	public void setDocked(boolean docked) {
-		this.docked = docked;
-	}
-
-
-	public static void setBalls(int balls) {
-		Ball.balls = balls;
-	}
-
-	public static int getBalls() {
-		return balls;
 	}
 }
