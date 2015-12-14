@@ -4,4 +4,3 @@
 * Added upgrades again.  
 * Made level 2.  
 * Made the ball sticky.  
->>>>>>> f8dafd1... Update ChangeLog.md
